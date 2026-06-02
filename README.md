@@ -15,6 +15,8 @@ It aims to keep nested configuration readable, explicit, and easy to parse.
   * [Attributes](#attributes)
   * [Comments](#comments)
   * [Design Goals](#design-goals)
+* [Installation](#Installation)
+* [Quick start](#quick-start)
 * [Planned Features](#planned-features)
 * [Status](#status)
 
@@ -210,6 +212,78 @@ TGL is built with these goals in mind:
 3. Reduce ambiguity in nested data
 4. Stay simple to parse
 5. Fit game data and similar hierarchical use cases
+
+## Installation
+install from source:
+```bash
+# download of source
+git clone github.com/keyhan-tiny112
+cd directory
+# install in python
+python -e install .
+```
+install from [*PYPI*](https://www.pypi.org) ( recommand ):
+```bash
+pip install tgl
+```
+
+## Quick start
+first check of [**installation**](#Installation) part for install of *TGL*.
+well, copy this file and learn:
+```python
+import tgl, json
+
+# let's write of example TGL
+sample = """
+<--
+i'm example block-comment
+this is a test
+-->
+[users]
+| basename = "tellme" -- for example this is a telegram copy
+| [user](online = false, id = 2432)
+  | name = "TGL-fan"
+  | username = "Bob1234"
+  | passwd = "54321"
+  ;
+;
+# write in the exmple file
+with open("test.tgl", "w") as f:
+  # write raw TGL
+  f.write(sample)
+  # write format TGL (comment deleted)
+  # f.write(tgl.load(sample).to_tgl())
+
+# read of example file (test.tgl)
+with open("test.tgl", "r") as f:
+   output = tgl.load(f.read()).to_dict()
+
+print(json.dumps(output, indent=4))
+# for dict => TGL
+sample = {
+    "name": "users",
+    "attrs": {},
+    "vars": {
+        "basename": "tellme"
+    },
+    "children": [
+        {
+            "name": "user",
+            "attrs": {
+                "online": false,
+                "id": 2432
+            },
+            "vars": {
+                "name": "TGL-fan",
+                "username": "Bob1234",
+                "passwd": "54321"
+            },
+            "children": []
+        }
+    ]
+}
+print(tgl.dump(sample))
+```
 
 ## Planned Features
 
